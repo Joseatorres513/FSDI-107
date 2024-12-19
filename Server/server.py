@@ -1,5 +1,7 @@
 from flask import Flask, request
 import json
+#db is within config which is used for the database
+from config import db
 
 app = Flask(__name__)
 
@@ -22,17 +24,29 @@ def hello():
         message = {"message":"Hey!"}
         return json.dumps(message)
 
-products = []
+
 @app.get("/api/products")
 def get_products():
+        #this was moved from line 26 to here during the database portion
+        products = []
+        cursor=db.products.find({})
+        for prod in cursor:
+            products.append(fix_id(prod))
         return json.dumps(products) 
+
+#this was done in the database portion in Mongo
+def fix_id(obj):
+    obj["_id"] = str(obj["_id"])
+    return obj
 
 @app.post("/api/products")
 def save_product():
         product = request.get_json()
         print(f"this is my new product{product}")
-        products.append(product)
-        return json.dumps(product)
+        #products.append(product)
+        db.products.insert_one(product)
+        # (fix_id(product)) was added during the database portion
+        return json.dumps(fix_id(product))
 
 
 @app.put("/api/products/<int:index>")
@@ -45,6 +59,7 @@ def update_product(index):
         return json.dumps(updated_product)
     else:
         return "That index does not exist"
+
 
 @app.delete("/api/products/<int:index>")
 def delete_product(index):
