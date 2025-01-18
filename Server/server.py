@@ -106,9 +106,25 @@ def delete_product(index):
     else:
         return "That index does not exist"
 
-app.run(debug=True) #that when i save the code, the changes are applied to the server
+@app.post("/api/coupons")
+def save_coupons():
+        coupon = request.get_json()
+        db.coupons.insert_one(coupon)
+        return json.dumps(fix_id(coupon))
 
-from bson.objectid import ObjectId
+@app.get("/api/coupons")
+def read_coupons():
+    results = []
+    cursor = db.coupons.find({})
+    for cp in cursor:
+        results.append(fix_id(cp))
+
+    return json.dumps(results)
+
+
+app.run(
+    debug=True,
+)
 
 @app.put("/api/products/<id>")
 def update_product(id):

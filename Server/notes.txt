@@ -13,7 +13,7 @@
 3. We need to launch the virtualenv
 
     MAC - source venv/bin/activate
-    WIN - venv\Scripts\activate      (using a forward slash \ which is the uncommon one)
+    WIN - (using a forward slash \ which is the uncommon one)
 
 4. We need to install flask - this is the server library
 
@@ -23,3 +23,7 @@
 
 
 app = Flask(__name__) this has two underscores on each side
+
+5. Start the Flask server
+    MAC - python3 server.py
+    WIN - py server.py
