@@ -2,8 +2,10 @@ from flask import Flask, request
 import json
 #db is within config which is used for the database
 from config import db
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app) # warning: disables CORS policy
 
 @app.get("/")
 def home():
@@ -44,6 +46,17 @@ def get_catalog():
     return json.dumps(catalog)
 
 
+@app.get("/api/categories")
+def get_categories():
+    results = []
+    cursor = db.products.find({})
+    for prod in cursor:
+        category = prod["category"]
+        if category not in results:
+            results.append(category)
+
+    return json.dumps(results)
+    
 #this was done in the database portion in Mongo
 def fix_id(obj):
     obj["_id"] = str(obj["_id"])

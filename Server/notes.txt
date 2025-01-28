@@ -13,7 +13,7 @@
 3. We need to launch the virtualenv
 
     MAC - source venv/bin/activate
-    WIN - (using a forward slash \ which is the uncommon one)
+    WIN - (using a forward slash \ which is the uncommon one) venv\Scrpts\activate
 
 4. We need to install flask - this is the server library
 
